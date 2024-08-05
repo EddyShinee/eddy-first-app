@@ -60,4 +60,5 @@ edited_df = st.data_editor(
     disabled=["command", "is_widget"],
     hide_index=True,
 )
+
 st.subheader("end", divider=True)
