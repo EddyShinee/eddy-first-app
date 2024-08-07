@@ -1,71 +1,43 @@
 import streamlit as st
-import pandas as pd
+from Utils.Auth import validate_login
+import Pages.Home.Home as home
+import Pages.About.About as about
+import Pages.Contact.Contact as contact
 
+def main():
+    if 'logged_in' not in st.session_state:
+        st.session_state['logged_in'] = False
+        st.session_state['page'] = 'Home'
 
-st.title("Eddy Dashboard")
-st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
-)
+    if not st.session_state['logged_in']:
+        login()
+    else:
+        sidebar()
+        if st.session_state['page'] == 'Home':
+            home.app()
+        elif st.session_state['page'] == 'About':
+            about.app()
+        elif st.session_state['page'] == 'Contact':
+            contact.app()
 
-st.write("Xin chào, đây là ứng dụng đầu tiên của tôi")
+def login():
+    st.title('Login')
+    username = st.text_input('Username')
+    password = st.text_input('Password', type='password')
+    if st.button('Login'):
+        if validate_login(username, password):
+            st.session_state['logged_in'] = True
+            # st.set_query_params['logged_in']=True  # Refresh the page
+        else:
+            st.error('Invalid username or password')
 
+def sidebar():
+    st.sidebar.title('Navigation')
+    page = st.sidebar.radio('Go to', ('Home', 'About', 'Contact'))
+    st.session_state['page'] = page
+    if st.sidebar.button('Logout'):
+        st.session_state['logged_in'] = False
+        # st.set_query_params['logged_in']=False  # Refresh the page
 
-st.write("thật là tuyệt")
-st.subheader("Four", divider=True)
-
-st.write("This is some text.")
-
-st.slider("This is a slider", 0, 100, (0, 25))
-
-def get_user_name():
-    return 'John'
-
-# ------------------------------------------------
-# Want people to see this part of the code...
-
-def get_punctuation():
-    return '!!!'
-
-greeting = "Hi there, "
-user_name = get_user_name()
-punctuation = get_punctuation()
-
-st.write(greeting, user_name, punctuation)
-foo = 'bar'
-st.write('Done!')
-
-st.divider()
-df = pd.DataFrame(
-    [
-        {"command": "st.selectbox", "rating": 4, "is_widget": True},
-        {"command": "st.balloons", "rating": 5, "is_widget": False},
-        {"command": "st.time_input", "rating": 3, "is_widget": True},
-    ]
-)
-
-edited_df = st.data_editor(
-    df,
-    column_config={
-        "command": "Streamlit Command",
-        "rating": st.column_config.NumberColumn(
-            "Your rating",
-            help="How much do you like this command (1-5)?",
-            min_value=1,
-            max_value=5,
-            step=1,
-            format="%d ⭐",
-        ),
-        "is_widget": "Widget ?",
-    },
-    disabled=["command", "is_widget"],
-    hide_index=True,
-)
-
-st.subheader("end", divider=True)
-
-
-st.metric(label="Gas price", value=4, delta=-0.5, delta_color="inverse")
-
-st.metric(
-    label="Active developers", value=123, delta=123, delta_color="off"
-)
+if __name__ == '__main__':
+    main()
