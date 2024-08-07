@@ -3,8 +3,9 @@ from Utils.Auth import validate_login
 import Pages.Home.Home as home
 import Pages.About.About as about
 import Pages.Contact.Contact as contact
-import Pages.MetaTraderAccount.MetaTraderAccount as mtaccount  # Import the MetaTraderAccount module
+import Pages.MetaTraderAccount.MetaTraderAccount as mtaccount
 from streamlit_cookies_manager import EncryptedCookieManager
+from SideBar.SideBar import sidebar
 
 # Create a cookie manager
 cookies = EncryptedCookieManager(
@@ -28,9 +29,8 @@ def main():
     if not st.session_state['logged_in']:
         login()
     else:
-        sidebar()
+        page = sidebar(cookies)
         # Use a dictionary to switch between pages
-        page = st.session_state['page']
         pages = {
             'Home': home.app,
             'About': about.app,
@@ -51,33 +51,10 @@ def login():
             st.session_state['Username'] = username
             cookies["logged_in"] = "true"
             cookies.save()
-            # st.session_state['page'] = 'Home'
-            # cookies["page"] = 'Home'
-            # st.experimental_set_query_params(logged_in='true', page='Home')
-            # st.stop()  # Stop execution to refresh the UI
+            # Refresh the page to update the state
+            # st.experimental_rerun()
         else:
             st.error('Invalid username or password')
-
-def sidebar():
-    st.sidebar.title('Navigation')
-    page = st.sidebar.selectbox('Quản lý tài khoản MetaTrader', ('MetaTraderProvider', 'MetaTraderAccount'))
-    st.sidebar.markdown("---")  # Add a separator line
-    page = st.sidebar.selectbox('Quản lý tài khoản', ('MetaTrader4', 'MetaTrader5'))
-    st.sidebar.markdown("---")
-    page = st.sidebar.selectbox('Quản lý danh sách lệnh', ('MetaTrader4', 'MetaTrader5'))
-    st.sidebar.markdown("---")
-    page = st.sidebar.selectbox('Phân tích kỹ thuật', ('MetaTrader4', 'MetaTrader5'))
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("Hello, " + st.session_state['Username'])
-    if page != st.session_state['page']:
-        st.session_state['page'] = page
-        cookies["page"] = page
-        cookies.save()
-
-    if st.sidebar.button('Logout'):
-        st.session_state['logged_in'] = False
-        cookies["logged_in"] = "false"
-        cookies.save()
 
 if __name__ == '__main__':
     main()
