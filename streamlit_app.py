@@ -14,6 +14,7 @@ cookies = EncryptedCookieManager(
 if not cookies.ready():
     st.stop()
 
+
 def main():
     if 'logged_in' not in st.session_state:
         # Check if there's a login cookie
@@ -35,6 +36,7 @@ def main():
         elif st.session_state['page'] == 'Contact':
             contact.app()
 
+
 def login():
     st.title('Login')
     username = st.text_input('Username')
@@ -46,21 +48,25 @@ def login():
             cookies["logged_in"] = "true"
             cookies["page"] = 'Home'
             cookies.save()
-            # st.experimental_rerun()
+            st.experimental_rerun()  # This should rerun the script to update the session state
         else:
             st.error('Invalid username or password')
+
 
 def sidebar():
     st.sidebar.title('Navigation')
     page = st.sidebar.radio('Go to', ('Home', 'About', 'Contact'))
-    st.session_state['page'] = page
-    cookies["page"] = page
-    cookies.save()
+    if page != st.session_state['page']:
+        st.session_state['page'] = page
+        cookies["page"] = page
+        cookies.save()
+        st.experimental_rerun()  # This should rerun the script to update the session state
     if st.sidebar.button('Logout'):
         st.session_state['logged_in'] = False
         cookies["logged_in"] = "false"
         cookies.save()
-        # st.experimental_rerun()
+        st.experimental_rerun()
+
 
 if __name__ == '__main__':
     main()
