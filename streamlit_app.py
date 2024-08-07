@@ -3,6 +3,7 @@ from Utils.Auth import validate_login
 import Pages.Home.Home as home
 import Pages.About.About as about
 import Pages.Contact.Contact as contact
+import Pages.MetaTraderAccount.MetaTraderAccount as mtaccount  # Import the MetaTraderAccount module
 from streamlit_cookies_manager import EncryptedCookieManager
 
 # Create a cookie manager
@@ -13,7 +14,6 @@ cookies = EncryptedCookieManager(
 
 if not cookies.ready():
     st.stop()
-
 
 def main():
     if 'logged_in' not in st.session_state:
@@ -29,13 +29,17 @@ def main():
         login()
     else:
         sidebar()
-        if st.session_state['page'] == 'Home':
-            home.app()
-        elif st.session_state['page'] == 'About':
-            about.app()
-        elif st.session_state['page'] == 'Contact':
-            contact.app()
-
+        # Use a dictionary to switch between pages
+        page = st.session_state['page']
+        pages = {
+            'Home': home.app,
+            'About': about.app,
+            'Contact': contact.app,
+            'MetaTraderAccount': mtaccount.app
+        }
+        # Call the function corresponding to the current page
+        if page in pages:
+            pages[page]()
 
 def login():
     st.title('Login')
@@ -44,29 +48,27 @@ def login():
     if st.button('Login'):
         if validate_login(username, password):
             st.session_state['logged_in'] = True
-            st.session_state['page'] = 'Home'
             cookies["logged_in"] = "true"
-            cookies["page"] = 'Home'
             cookies.save()
-            st.experimental_rerun()  # This should rerun the script to update the session state
+            # st.session_state['page'] = 'Home'
+            # cookies["page"] = 'Home'
+            # st.experimental_set_query_params(logged_in='true', page='Home')
+            # st.stop()  # Stop execution to refresh the UI
         else:
             st.error('Invalid username or password')
 
-
 def sidebar():
     st.sidebar.title('Navigation')
-    page = st.sidebar.radio('Go to', ('Home', 'About', 'Contact'))
+    page = st.sidebar.radio('Go to', ('Home', 'About', 'Contact', 'MetaTraderAccount'))
     if page != st.session_state['page']:
         st.session_state['page'] = page
         cookies["page"] = page
         cookies.save()
-        st.experimental_rerun()  # This should rerun the script to update the session state
+
     if st.sidebar.button('Logout'):
         st.session_state['logged_in'] = False
         cookies["logged_in"] = "false"
         cookies.save()
-        st.experimental_rerun()
-
 
 if __name__ == '__main__':
     main()
