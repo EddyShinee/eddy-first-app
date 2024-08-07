@@ -48,8 +48,8 @@ def login():
     if st.button('Login'):
         if validate_login(username, password):
             st.session_state['logged_in'] = True
-            st.session_state['Username'] = username
             cookies["logged_in"] = "true"
+            cookies["Username"] = username
             cookies.save()
             # Refresh the page to update the state
             # st.experimental_rerun()

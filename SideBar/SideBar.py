@@ -1,7 +1,6 @@
 import streamlit as st
 from streamlit_cookies_manager import EncryptedCookieManager
 
-
 def sidebar(cookies):
     st.sidebar.title('Navigation')
     page = st.sidebar.selectbox('Quản lý tài khoản MetaTrader', ('MetaTraderProvider', 'MetaTraderAccount'))
@@ -10,19 +9,21 @@ def sidebar(cookies):
     st.sidebar.markdown("---")
     page = st.sidebar.selectbox('Quản lý danh sách lệnh', ('MetaTrader4', 'MetaTrader5'))
     st.sidebar.markdown("---")
-    page = st.sidebar.selectbox('Phân tích kỹ thuật', ('MetaTrader4', 'MetaTrader5'))
-    st.sidebar.markdown("---")
-    if 'Username' in st.session_state:
-        st.sidebar.markdown(f"Hello, {st.session_state['Username']}")
 
-    if page != st.session_state.get('page'):
-        st.session_state['page'] = page
-        cookies["page"] = page
-        cookies.save()
+    # Check if Username exists in cookies
+    username = cookies.get("Username")
+    if username:
+        st.sidebar.markdown(f"Hello, {username}")
+
+    if 'page' in st.session_state:
+        if cookies.get("page") != st.session_state['page']:
+            cookies["page"] = st.session_state['page']
+            cookies.save()
+            st.experimental_rerun()  # Refresh the page only if the page state has changed
 
     if st.sidebar.button('Logout'):
         st.session_state['logged_in'] = False
         cookies["logged_in"] = "false"
         cookies.save()
 
-    return st.session_state['page']
+    return st.session_state.get('page', 'Home')
