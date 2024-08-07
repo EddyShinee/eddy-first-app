@@ -48,6 +48,7 @@ def login():
     if st.button('Login'):
         if validate_login(username, password):
             st.session_state['logged_in'] = True
+            st.session_state['Username'] = username
             cookies["logged_in"] = "true"
             cookies.save()
             # st.session_state['page'] = 'Home'
@@ -59,7 +60,15 @@ def login():
 
 def sidebar():
     st.sidebar.title('Navigation')
-    page = st.sidebar.radio('Go to', ('Home', 'About', 'Contact', 'MetaTraderAccount'))
+    page = st.sidebar.selectbox('Quản lý tài khoản MetaTrader', ('MetaTraderProvider', 'MetaTraderAccount'))
+    st.sidebar.markdown("---")  # Add a separator line
+    page = st.sidebar.selectbox('Quản lý tài khoản', ('MetaTrader4', 'MetaTrader5'))
+    st.sidebar.markdown("---")
+    page = st.sidebar.selectbox('Quản lý danh sách lệnh', ('MetaTrader4', 'MetaTrader5'))
+    st.sidebar.markdown("---")
+    page = st.sidebar.selectbox('Phân tích kỹ thuật', ('MetaTrader4', 'MetaTrader5'))
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("Hello, " + st.session_state['Username'])
     if page != st.session_state['page']:
         st.session_state['page'] = page
         cookies["page"] = page
