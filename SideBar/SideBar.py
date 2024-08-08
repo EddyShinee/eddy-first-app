@@ -3,11 +3,11 @@ from streamlit_cookies_manager import EncryptedCookieManager
 
 def sidebar(cookies):
     st.sidebar.title('Navigation')
-    page = st.sidebar.selectbox('Quản lý tài khoản MetaTrader', ('MetaTraderProvider', 'MetaTraderAccount'))
+    page = st.sidebar.radio('Quản lý tài khoản MetaTrader', ('AccountMetaTrader', 'MetaTraderAccount'))
     st.sidebar.markdown("---")  # Add a separator line
-    page = st.sidebar.selectbox('Quản lý tài khoản', ('MetaTrader4', 'MetaTrader5'))
+    page = st.sidebar.radio('Quản lý tài khoản', ('MetaTrader4', 'MetaTrader5'))
     st.sidebar.markdown("---")
-    page = st.sidebar.selectbox('Quản lý danh sách lệnh', ('MetaTrader4', 'MetaTrader5'))
+    page = st.sidebar.radio('Quản lý danh sách lệnh', ('MetaTrader4', 'MetaTrader5'))
     st.sidebar.markdown("---")
 
     # Check if Username exists in cookies
@@ -19,11 +19,12 @@ def sidebar(cookies):
         if cookies.get("page") != st.session_state['page']:
             cookies["page"] = st.session_state['page']
             cookies.save()
-            st.experimental_rerun()  # Refresh the page only if the page state has changed
+            st.rerun()  # Refresh the page only if the page state has changed
 
     if st.sidebar.button('Logout'):
         st.session_state['logged_in'] = False
         cookies["logged_in"] = "false"
         cookies.save()
+        st.rerun()
 
     return st.session_state.get('page', 'Home')

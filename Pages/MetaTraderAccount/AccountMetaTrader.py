@@ -1,8 +1,8 @@
 import streamlit as st
 
 def app():
-    st.title("Contact")
-    st.write("Welcome to the Contact page!")
+    st.title("Meta Trader Account")
+    st.write("Meta Trader Account")
 
     tab1, tab2, tab3 = st.tabs(["Cat", "Dog", "Owl"])
 

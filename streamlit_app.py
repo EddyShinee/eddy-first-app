@@ -3,7 +3,7 @@ from Utils.Auth import validate_login
 import Pages.Home.Home as home
 import Pages.About.About as about
 import Pages.Contact.Contact as contact
-import Pages.MetaTraderAccount.MetaTraderAccount as mtaccount
+import Pages.MetaTraderAccount.AccountMetaTrader as mtaccount
 from streamlit_cookies_manager import EncryptedCookieManager
 from SideBar.SideBar import sidebar
 
@@ -35,7 +35,7 @@ def main():
             'Home': home.app,
             'About': about.app,
             'Contact': contact.app,
-            'MetaTraderAccount': mtaccount.app
+            'AccountMetaTrader': mtaccount.app
         }
         # Call the function corresponding to the current page
         if page in pages:
@@ -51,6 +51,7 @@ def login():
             cookies["logged_in"] = "true"
             cookies["Username"] = username
             cookies.save()
+            st.rerun()
             # Refresh the page to update the state
             # st.experimental_rerun()
         else:
