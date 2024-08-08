@@ -11,7 +11,7 @@ from streamlit_cookies_manager import EncryptedCookieManager
 from SideBar.SideBar import sidebar
 
 # Set page configuration to use the full width
-st.set_page_config(page_title="My Streamlit App", layout="wide")
+st.set_page_config(page_title="Eddy Shinee", layout="wide")
 # Create a cookie manager
 cookies = EncryptedCookieManager(
     prefix="myapp_",  # prefix for cookie names
