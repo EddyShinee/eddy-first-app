@@ -26,5 +26,4 @@ def sidebar(cookies):
         cookies["logged_in"] = "false"
         cookies.save()
         st.rerun()
-
     return st.session_state.get('page', 'Home')
