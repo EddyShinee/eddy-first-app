@@ -3,7 +3,7 @@ from Utils.Auth import validate_login
 import Pages.Home.Home as home
 import Pages.About.About as about
 import Pages.Contact.Contact as contact
-import Pages.MetaTraderAccount.AccountMetaTrader as mtaccount
+import Pages.MetaTraderAccount.AccountMetaTrader as accountmt
 from streamlit_cookies_manager import EncryptedCookieManager
 from SideBar.SideBar import sidebar
 
@@ -30,16 +30,19 @@ def main():
         login()
     else:
         page = sidebar(cookies)
+        print(page)
         # Use a dictionary to switch between pages
         pages = {
             'Home': home.app,
             'About': about.app,
             'Contact': contact.app,
-            'AccountMetaTrader': mtaccount.app
+            'AccountMetaTrader': accountmt.app
         }
         # Call the function corresponding to the current page
         if page in pages:
             pages[page]()
+
+
 
 def login():
     st.title('Login')

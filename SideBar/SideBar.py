@@ -3,13 +3,11 @@ from streamlit_cookies_manager import EncryptedCookieManager
 
 def sidebar(cookies):
     st.sidebar.title('Navigation')
-    page = st.sidebar.radio('Quản lý tài khoản MetaTrader', ('AccountMetaTrader', 'MetaTraderAccount'))
-    st.sidebar.markdown("---")  # Add a separator line
-    page = st.sidebar.radio('Quản lý tài khoản', ('MetaTrader4', 'MetaTrader5'))
-    st.sidebar.markdown("---")
-    page = st.sidebar.radio('Quản lý danh sách lệnh', ('MetaTrader4', 'MetaTrader5'))
-    st.sidebar.markdown("---")
 
+    # Sử dụng radio để chọn trang
+    page = st.sidebar.radio('Điều hướng',('Home', 'About', 'Contact'))
+    st.session_state['page'] = page
+    st.sidebar.markdown("---")
     # Check if Username exists in cookies
     username = cookies.get("Username")
     if username:
