@@ -5,9 +5,10 @@ def sidebar(cookies):
     st.sidebar.title('Navigation')
 
     # Sử dụng radio để chọn trang
-    page = st.sidebar.radio('Điều hướng',('Home', 'About', 'Contact'))
-    st.session_state['page'] = page
+    # page = st.sidebar.radio('Điều hướng',('Home', 'About', 'Contact'))
+    page = st.sidebar.radio('Điều hướng',('Dashboard', 'AccountMetaTrader', 'MetaTrader4', 'MetaTrader5'))
     st.sidebar.markdown("---")
+    st.session_state['page'] = page
     # Check if Username exists in cookies
     username = cookies.get("Username")
     if username:
