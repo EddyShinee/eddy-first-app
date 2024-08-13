@@ -14,7 +14,7 @@ def login(cookies):
                 cookies["logged_in"] = "true"
                 cookies["Username"] = username
                 cookies.save()
-                st.rerun()  # Refresh the page to update the state
+                st.rerun()  # Làm mới trang để cập nhật trạng thái
             else:
                 st.error('Invalid username or password')
     st.markdown('</div>', unsafe_allow_html=True)
